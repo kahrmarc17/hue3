@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{includes/bootstrapMeta :: bootstrapMeta}" />
+<title>Music Instrument Manager</title>
+<div th:replace="~{includes/bootstrapCSS :: bootstrapCSS}" />
+</head>
+<body>
+	<div class="container" role="main">
+
+
+
+		<!--  1 simple button ----------------------------------------------------------- -->
+		<div class="row">
+			<div class="col-md-10">
+				<h1>Music Instrument Manager - Spring Data JPA</h1>
+			</div>
+
+			<div class="col-md-2">
+				<a href="fillInstrumentList">
+					<button type="button" class="btn btn-success">Fill Instrumentlist</button>
+				</a>
+			</div>
+		</div>
+
+		<!--  search by Id ----------------------------------------------------------- -->
+		<form action="findById" method="post">
+			<div class="form-row">
+				<div class="form-group col-sm-12">
+					<label for="id">Find by ID:</label>
+					<input id="id" type="text" class="form-control" name="id">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-sm-12">
+					<input class="btn btn-primary" type="submit" value="Run">
+				</div>
+			</div>
+		</form>
+
+		<!--  paging example ----------------------------------------------------------- -->
+		<form action="getPage" method="post">
+			<div class="form-row">
+				<div class="form-group col-sm-6">
+					<label for="page">Page:</label>
+					<input id="page" type="text" class="form-control" name="page">
+				</div>		
+				<div class="form-group col-sm-6">
+					<label for="size">Size:</label>
+					<input id="size" type="text" class="form-control" name="size">	
+				</div>
+			</div>	
+			<div class="form-row">
+				<div class="form-group col-sm-12">
+			  		<input class="btn btn-primary" type="submit" value="Run">
+				</div>
+			</div>
+		</form>
+
+
+		<!--  Search + Fill ----------------------------------------------------------- -->
+			<form method="post" action="find">
+				<div class="form-row">
+					<div class="form-group col-sm-6">
+						<label for="searchType">Search for:</label> 
+						<select id="searchType" class="form-control" name="searchType">
+							<option value="query1" selected="selected">Show all instruments</option>							
+							<option value="query2">Filter instruments by category</option>
+				     		<option value="query3">Filter instruments by category or name</option>
+				     		<option value="query4">Search with query</option>
+							<option value="query5">Search with named query</option>
+							<option value="query6">Search top 15 instruments order by name</option>
+							<option value="query7">Count instruments by category</option>
+							<option value="query8">Delete instruments by name</option>
+							<option value="query9">Delete all instruments from manufacturer</option>
+							<option value="query10">Find all instruments by manufacturer and sort by name ascending</option>
+							<option value="query11">Find all instruments where category or name contains a given searchstring</option>
+						</select>
+					</div>
+					<div class="form-group col-sm-6">
+						<label for="searchString">Search for a String:</label>
+						<input id="searchString" class="form-control" type="text" name="searchString">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-sm-12">
+						<input class="btn btn-primary" type="submit" value="Run">	
+					</div>
+				</div>
+			</form>
+
+			<!--  Search + Fill ----------------------------------------------------------- -->
+			<h3>Count: <span th:text="${count}"></span></h3>
+
+		<div class="row">
+			<div class="col-md-10 offset-md-1">
+
+				<table data-toggle="table" class="table table-striped">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Category</th>
+							<th>Name</th>
+							<th>Manufacturer</th>
+							<th>Description</th>
+							<th>Price (Euro)</th>
+							<th>Availability</th>
+							<th>Weight (kg)</th>
+							<th>Amount</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!--  list all items ----------------------------------------------------------- -->
+						<tr th:each="instrument : ${instruments}">
+							<td th:text="${instrument.id}"></td>
+							<td th:text="${instrument.category}"></td>
+							<td th:text="${instrument.name}"></td>
+							<td th:text="${instrument.manufacturer.name}"></td>
+							<td th:text="${instrument.description}"></td>
+							<td th:text="${instrument.price}"></td>
+							<td th:text="${#calendars.format(instrument.dateofavailability,'dd.MM.yyyy')}"></td>
+							<td th:text="${instrument.weight}"></td>
+							<td th:text="${instrument.amount}"></td>
+							<td><a th:href="@{/delete(id=${instrument.id})}" class="btn btn-danger">Delete</a></td>
+							
+						</tr>
+						<!--  list all items ----------------------------------------------------------- -->
+					</tbody>
+				</table>
+								
+			</div>
+		</div>
+	</div>
+	<!--  End of container -->
+	<div th:replace="~{includes/bootstrapJS :: bootstrapJS}" />
+</body>
+</html>
